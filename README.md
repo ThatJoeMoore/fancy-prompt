@@ -1,7 +1,7 @@
 # fancy-prompt
 A Very Fancy Bash Prompt 🎩
 
-
+![Demo](example.png)
 
 # Installation
 
