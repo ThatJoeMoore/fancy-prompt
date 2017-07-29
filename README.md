@@ -1,5 +1,5 @@
 # fancy-prompt
-A Very Fancy Bash Prompt 🎩
+A Very Fancy 🎩 Bash Prompt for Macos
 
 ![Demo](example.png)
 
@@ -22,4 +22,4 @@ PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/sbin:/usr/local/bin
 
 ```
 
-Profit!
+Enjoy!
