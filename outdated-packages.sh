@@ -8,7 +8,7 @@ check_brew() {
 
 check_npm() {
   echo checking npm
-  npm outdated --global | wc -l | tr -d '[:space:]' > /tmp/.npm-outdated
+  npm outdated --global --parseable | grep -v "linked$" | wc -l | tr -d '[:space:]' > /tmp/.npm-outdated
 }
 
 check_pip() {
