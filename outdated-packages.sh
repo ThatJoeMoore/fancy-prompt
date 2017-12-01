@@ -8,7 +8,7 @@ check_brew() {
 
 check_npm() {
   echo checking npm
-  npm outdated --global --parseable | grep -v "linked$" | wc -l | tr -d '[:space:]' > /tmp/.npm-outdated
+  npm outdated --global --parseable | grep -v "linked$" | grep -v "npm" | wc -l | tr -d '[:space:]' > /tmp/.npm-outdated
 }
 
 check_pip() {
@@ -18,7 +18,14 @@ check_pip() {
   pip3 list --outdated --format=legacy | wc -l | tr -d '[:space:]' > /tmp/.pip3-outdated
 }
 
+check_ckan() {
+  echo checking ckan
+  ckan update
+  ckan list | grep "^\\^" | wc -l | tr -d '[:space:]' > /tmp/.ckan-outdated
+}
+
 check_brew
 check_npm
 check_pip
+check_ckan
 

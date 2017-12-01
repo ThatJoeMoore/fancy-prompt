@@ -1,9 +1,9 @@
 #!/bin/bash
 
 _count_updates() {
-  type=$1
-  f=/tmp/.$type-outdated
-  upd=0
+  local type=$1
+  local f=/tmp/.$type-outdated
+  local upd=0
   if [ -f "$f" ]; then
     upd=`cat $f`
   fi
@@ -11,9 +11,9 @@ _count_updates() {
 }
 
 _has_updates() {
-  type=$1
+  local type=$1
 
-  cnt=`_count_updates $type`
+  local cnt=`_count_updates $type`
   if [ "$cnt" -gt "0" ]; then
 	  return 0
   fi
@@ -21,10 +21,10 @@ _has_updates() {
 }
 
 _update_prompt() {
-  type=$1
-  icon=$2
+  local type=$1
+  local icon=$2
 
-  upd=`_count_updates $type`
+  local upd=`_count_updates $type`
   if [ "$upd" -gt 0 ]; then
     echo -e "\x1B[104m\x1B[97m$icon You have $upd $1 update(s).$icon \x1B[0m"
   fi
@@ -32,27 +32,42 @@ _update_prompt() {
 
 # configure my multi-line prompt
 fancyprompt() {
+  local e="$?"
+  prompt=⏩
+  #if [ $e -ne 0 ]; then
+  #  prompt=💩
+  #fi
+
   echo 
 
   _update_prompt brew 🍺
   _update_prompt npm 📦
   _update_prompt pip2 🐍
   _update_prompt pip3 🐍
+  _update_prompt ckan 🚀
   
-  where=$PWD
-  home=$HOME
-  work="$home/work"
+  local where=$PWD
+  local home=$HOME
+  local work="$home/work"
 
   where="${where/$work/🏢 }"
   where="${where/$home/🏠 }"
+  where="${where/\/keybase//🔐 }"
 
-  PS1='$where
-⏩  '
+  PS1="$where
+$prompt  "
+}
+
+__exit_status() {
+	E="$?"
+	PS1='$E >>'
 }
 
 PROMPT_COMMAND=fancyprompt
+#PROMPT_COMMAND=__exit_status
 
 update_all() {
+  ~/bin/fancy-prompt/outdated-packages.sh
   if _has_updates brew; then
 	  echo "Updating Brew"
 	  brew upgrade
@@ -77,7 +92,12 @@ update_all() {
 	  pip3 list --outdated --format=freeze | cut -d = -f 1 | xargs -n1 pip3 install -U
   fi
 
-  echo "Finshed updating"
+  if _has_updates ckan; then
+	  echo "Updating CKAN"
+	  ckan upgrade --all
+  fi
+
   ~/bin/fancy-prompt/outdated-packages.sh
+  echo "Finished updating"
 }
 
