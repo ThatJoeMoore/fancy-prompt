@@ -33,7 +33,7 @@ _update_prompt() {
 # configure my multi-line prompt
 fancyprompt() {
   local e="$?"
-  prompt=⏩
+  prompt=">>"
   #if [ $e -ne 0 ]; then
   #  prompt=💩
   #fi
@@ -101,3 +101,25 @@ update_all() {
   echo "Finished updating"
 }
 
+display_updates() {
+  if _has_updates brew; then
+	  echo "🍺 brew updates"
+	  brew outdated
+  fi
+  if _has_updates npm; then
+	  echo "📦 npm updates"
+	  npm outdated --global
+  fi
+  if _has_updates pip2; then
+	  echo "🐍 pip2 updates"
+	  pip2 list --outdated --format=columns
+  fi
+  if _has_updates pip3; then
+	  echo "🐍 pip3 updates"
+	  pip3 list --outdated --format=columns
+  fi
+  if _has_updates ckan; then
+	  echo "🚀 ckan updates"
+	  ckan list
+  fi
+}
